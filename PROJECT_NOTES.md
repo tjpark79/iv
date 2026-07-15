@@ -2,33 +2,31 @@
 
 마지막 업데이트: 2026-07-15
 
-## 0. 중요: 백엔드가 FastAPI → Next.js로 전환됨 (2026-07-15)
+## 0. 중요: DB를 완전히 걷어내고 정적 사이트로 전환함 (2026-07-15, 2차)
 
-Hostinger 비즈니스 플랜 hPanel에서 **Python App 기능 자체를 지원하지 않는 것으로 확인**되어(Node.js App만 가능), 기존 FastAPI 백엔드를 폐기하고 그 역할을 Next.js 안으로 흡수했다. `/Users/tj/P/iv/backend` (FastAPI)는 더 이상 배포에 쓰이지 않는 레거시 코드 — 삭제 여부는 아직 미결정.
+FastAPI → Next.js(node:sqlite) 전환 이후에도 **Hostinger가 git push마다 앱 폴더를 통째로 재생성해서 SQLite DB 파일이 배포할 때마다 초기화되는 문제**가 반복됨(자격증명 파일 커밋처럼 코드 변경이 없는 push에도 재배포가 걸려 DB가 날아감). Supabase 같은 외부 DB로 옮기는 대신, **콘텐츠가 사실상 확정됐고 관리자 화면도 없어 DB의 실시간 편집 기능을 아무도 안 쓰고 있었기 때문에, DB 자체를 없애고 콘텐츠를 코드에 직접 고정하는 쪽을 선택**함.
 
-**새 아키텍처**: 프론트엔드 = 백엔드 = Next.js 앱 하나
-- DB 접근: Node 22 내장 `node:sqlite` 모듈 사용 (네이티브 컴파일 불필요, 공유호스팅 CageFS 샌드박스에서도 안전)
-- 공개 페이지(`page.tsx`)는 `lib/content.ts`를 통해 **DB를 직접 조회** (fetch/HTTP 왕복 없음)
-- 문의폼 제출, 관리자 로그인/CRUD는 Next.js Route Handler(`app/api/**/route.ts`)로 구현, 기존 FastAPI 라우트와 동일한 경로/동작 유지
-- 인증은 `jose` 라이브러리로 JWT 발급/검증 (기존 FastAPI의 Bearer 토큰 방식과 동일하게 유지)
-- DB 파일: `frontend/data/interventures.db` (gitignore 처리, `node scripts/seed.mjs`로 초기 시딩)
+**현재 아키텍처**: DB 없음, 완전 정적 콘텐츠
+- `src/lib/content.ts`에 서비스/포트폴리오/타임라인/팀/클라이언트 데이터가 배열로 직접 박혀있음
+- `db.ts`, `auth.ts`, `adminCrud.ts`, `app/api/**` (관리자 로그인/CRUD/문의폼 API) 전부 삭제 — 이제 순수 정적 페이지 하나뿐
+- `jose`, `server-only` 의존성 제거
+- 빌드 결과 `/` 라우트가 `○` (완전 정적, 빌드 시점에 미리 렌더링)로 나옴 — 서버 쪽에서 매 요청마다 할 일이 없음
+- **콘텐츠를 바꾸려면 `src/lib/content.ts`를 수정하고 다시 배포(git push)해야 함** — 이건 이전에도 실질적으로 똑같았음(저를 통해 코드/DB를 고치는 방식으로 운영), 실질적 손실 없음
 
-이 교훈은 bs/mt5(둘 다 FastAPI)에도 그대로 적용됨 — 같은 서버에 올리려면 동일하게 Next.js API Route로 포팅하거나, Python이 되는 다른 곳에 백엔드를 둬야 함.
+이 방향의 장점: 배포마다 DB가 초기화되는 문제가 원천적으로 사라짐, 구조가 훨씬 단순해짐, 노드 프로세스가 할 일이 거의 없어짐(정적 페이지 서빙만).
+
+이 교훈은 bs/mt5(둘 다 FastAPI + 실시간 트레이딩/분석 로직)에는 그대로 적용 안 됨 — 그쪽은 콘텐츠가 정적이지 않고 실제 동적 데이터/로직이 핵심이라 이 방식으로 못 옮김. bs/mt5는 여전히 Python 지원 호스팅 확보 또는 로직 전체 재작성이 필요한 상태 (이전 논의 참고).
 
 ## 1. 스택 & 프로젝트 구조
 
-- 프론트엔드 + 백엔드: Next.js (App Router, TypeScript, Tailwind CSS v4, `node:sqlite`) — `/Users/tj/P/iv/frontend`
-- ~~백엔드: FastAPI + SQLite~~ — `/Users/tj/P/iv/backend` (2026-07-15부로 미사용, 위 0번 항목 참고)
+- 프론트엔드: Next.js (App Router, TypeScript, Tailwind CSS v4), **DB/백엔드 없음, 완전 정적** — `/Users/tj/P/iv/frontend`
+- ~~백엔드: FastAPI + SQLite~~ — `/Users/tj/P/iv/backend` (미사용 레거시 코드, 참고용으로만 보관하기로 함)
 - 레거시 자료: `/Users/tj/P/iv/iv_h` (2019년 Bootstrap Agency 템플릿 기반 구 홈페이지, 콘텐츠 이관 완료)
 
 ### 코드 구조 (Next.js)
-- `src/lib/db.ts`: `node:sqlite` 연결 + 스키마 생성
-- `src/lib/content.ts`: 공개 콘텐츠 조회 함수 (Server Component가 직접 호출, HTTP 없음) + 문의 관련 DB 함수
-- `src/lib/auth.ts`: JWT 발급/검증(`jose`), 관리자 자격증명 확인
-- `src/lib/adminCrud.ts`: 관리자 CRUD 라우트 핸들러 제너레이터 (테이블/필드만 넘기면 GET/POST/PUT/DELETE 생성)
-- `src/app/api/contact/route.ts`, `src/app/api/auth/login/route.ts`, `src/app/api/admin/**/route.ts`: 실제 HTTP 엔드포인트
-- `scripts/seed.mjs`: 초기 콘텐츠 시딩 스크립트 (`node scripts/seed.mjs`)
-- 로컬 개발 포트: 4173 하나만 사용 (백엔드 프로세스 별도 실행 불필요)
+- `src/lib/content.ts`: 서비스/포트폴리오/타임라인/팀/클라이언트 콘텐츠가 배열로 직접 박혀있는 유일한 데이터 소스 — **콘텐츠 수정은 이 파일을 고치는 것**
+- `src/lib/api.ts`: `ContactForm.tsx`(현재 미사용, 화면에 렌더링 안 됨)가 참조하는 클라이언트 fetch 헬퍼 — 실제 엔드포인트는 없으므로 재사용하려면 별도 처리 필요
+- 로컬 개발 포트: 4173 하나만 사용, 백엔드 프로세스 없음
 
 ## 2. 디자인 방향
 
@@ -80,10 +78,10 @@ Hostinger 비즈니스 플랜 hPanel에서 **Python App 기능 자체를 지원�
 - 서버 SSH 접속 정보: `ssh -p 65002 u828282719@217.21.91.124` (hPanel → Advanced → SSH Access에서 확인/재발급 가능)
 
 ### 남은 배포 작업
-- [ ] 이번 마이그레이션(FastAPI 제거, node:sqlite로 전환) 커밋 후 push → 자동배포 확인
-- [ ] Hostinger 서버의 `.htaccess`에 프로덕션용 환경변수(`JWT_SECRET`, `ACCESS_TOKEN_EXPIRE_MINUTES`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`) `SetEnv`로 등록
-- [ ] 서버에서 `node scripts/seed.mjs` 실행해 프로덕션 DB 시딩
-- [ ] `https://inter.vc` 정상 응답(200) 확인
+- [ ] 이번 마이그레이션(DB 완전 제거, 정적 콘텐츠로 전환) 커밋 후 push → 자동배포 확인
+- [ ] Hostinger 서버 `.htaccess`의 `JWT_SECRET`/`ADMIN_USERNAME`/`ADMIN_PASSWORD`/`ACCESS_TOKEN_EXPIRE_MINUTES` SetEnv 라인 제거 (더 이상 안 씀, 안 지워도 무해하지만 정리 차원)
+- [ ] 서버에 남아있는 `~/domains/inter.vc/nodejs/data/`, `~/domains/inter.vc/nodejs/seed.mjs` (예전에 수동으로 올려둔 파일) 정리
+- [ ] `https://inter.vc` 정상 응답(200) 확인 — DB 없이도 콘텐츠 다 보이는지
 
 ### 멀티 프로젝트 서브패스 호스팅 계획 (재검토 필요)
 
@@ -154,10 +152,11 @@ Hostinger 비즈니스 플랜 hPanel에서 **Python App 기능 자체를 지원�
 
 - [x] GitHub 저장소 생성/푸시 (`tjpark79/iv`)
 - [x] FastAPI → Next.js(node:sqlite) 백엔드 마이그레이션
-- [ ] Hostinger 프로덕션 환경변수 설정 + 배포 확인 (섹션 4 참고)
+- [x] node:sqlite DB도 완전히 제거하고 정적 콘텐츠로 전환 (배포마다 DB 초기화되는 문제 근본 해결)
+- [ ] 서버 `.htaccess` 환경변수 정리 + 잔여 파일(`nodejs/data/`, `nodejs/seed.mjs`) 정리
 - [ ] bs 미커밋 변경사항 정리 상태 확인 후 인증 통합 작업 착수 지시 대기 중
 - [ ] mt5 인증을 bs 스타일로 전환 (tier 체계 재설계 + 데이터 마이그레이션 포함) — **코드 작업 미시작, 사용자 지시 대기**
-- [ ] bs/mt5도 Python App 미지원 이슈에 걸림 — Next.js API Route 포팅 여부 논의 필요
-- [ ] interVentures 관리자 UI (로그인 화면 + 콘텐츠 CRUD 화면 + 문의함) — API는 준비됐으나 화면 미구현
+- [ ] bs/mt5도 Python App 미지원 이슈에 걸림 — Next.js API Route 포팅 여부 논의 필요 (단, bs/mt5는 콘텐츠가 정적이지 않아 iv처럼 "DB 제거" 방식은 적용 불가)
+- [ ] interVentures 관리자 UI — DB를 없앴으므로 이제 불필요 (콘텐츠 수정은 코드 편집 + 배포로 진행)
 - [ ] mt5 GitHub 원격 저장소 연결 여부 결정 필요
 - [ ] `/Users/tj/P/iv/backend` (구 FastAPI 코드) 삭제 여부 결정 필요
