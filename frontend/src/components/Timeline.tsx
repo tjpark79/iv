@@ -1,4 +1,3 @@
-import Image from "next/image";
 import type { TimelineEntry } from "@/lib/content";
 
 export default function Timeline({ entries }: { entries: TimelineEntry[] }) {
@@ -14,16 +13,7 @@ export default function Timeline({ entries }: { entries: TimelineEntry[] }) {
         <div className="divide-y divide-brand-border border-t border-b border-brand-border">
           {entries.map((entry) => (
             <div key={entry.id} className="flex items-start gap-6 py-7">
-              <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-sm mt-1">
-                <Image
-                  src={entry.image_url}
-                  alt={entry.organization}
-                  fill
-                  className="object-cover"
-                  sizes="40px"
-                />
-              </div>
-              <div className="w-32 shrink-0 text-sm font-mono text-muted pt-1">
+              <div className="w-24 shrink-0 text-sm font-mono text-muted pt-1">
                 {entry.period}
               </div>
               <div>
