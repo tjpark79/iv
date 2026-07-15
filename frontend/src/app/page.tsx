@@ -4,14 +4,12 @@ import Services from "@/components/Services";
 import Portfolio from "@/components/Portfolio";
 import Timeline from "@/components/Timeline";
 import Footer from "@/components/Footer";
-import { getPortfolio, getServices, getTimeline } from "@/lib/api";
+import { getPortfolio, getServices, getTimeline } from "@/lib/content";
 
 export default async function Home() {
-  const [services, portfolio, timeline] = await Promise.all([
-    getServices(),
-    getPortfolio(),
-    getTimeline(),
-  ]);
+  const services = getServices();
+  const portfolio = getPortfolio();
+  const timeline = getTimeline();
 
   return (
     <>

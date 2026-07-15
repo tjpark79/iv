@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { TimelineEntry } from "@/lib/api";
+import type { TimelineEntry } from "@/lib/content";
 
 export default function Timeline({ entries }: { entries: TimelineEntry[] }) {
   return (

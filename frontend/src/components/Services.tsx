@@ -1,4 +1,4 @@
-import type { Service } from "@/lib/api";
+import type { Service } from "@/lib/content";
 
 export default function Services({ services }: { services: Service[] }) {
   return (

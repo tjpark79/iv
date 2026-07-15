@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Plus } from "lucide-react";
-import type { PortfolioItem } from "@/lib/api";
+import type { PortfolioItem } from "@/lib/content";
 
 export default function Portfolio({ items }: { items: PortfolioItem[] }) {
   const [expandedId, setExpandedId] = useState<number | null>(null);
