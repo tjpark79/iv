@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "interVentures | 인터벤처스",
   description: "대한민국 국가경쟁력을 선도할 스타트업들과 함께 뛰는 인터벤처스",
+  other: {
+    "google-adsense-account": "ca-pub-8977093633487347",
+  },
 };
 
 export default function RootLayout({
