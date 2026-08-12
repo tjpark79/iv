@@ -39,3 +39,107 @@ body {
 .section-heading {
   letter-spacing: -0.01em;
 }
+
+/* 인사이트 본문. 마크다운을 변환한 HTML이라 클래스를 붙일 수 없어 요소 선택자로 쓴다. */
+.insight-body {
+  color: var(--foreground);
+  line-height: 1.85;
+}
+
+.insight-body > * + * {
+  margin-top: 1.25rem;
+}
+
+.insight-body h2 {
+  margin-top: 3rem;
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--color-brand-border);
+}
+
+.insight-body h3 {
+  margin-top: 2.25rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--color-brand);
+}
+
+.insight-body ul,
+.insight-body ol {
+  padding-left: 1.25rem;
+}
+
+.insight-body ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.insight-body ul > li {
+  position: relative;
+  padding-left: 1rem;
+}
+
+.insight-body ul > li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--color-brand);
+}
+
+.insight-body ol {
+  list-style: decimal;
+}
+
+.insight-body li + li {
+  margin-top: 0.5rem;
+}
+
+.insight-body strong {
+  font-weight: 600;
+}
+
+.insight-body a {
+  color: var(--color-brand);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.insight-body blockquote {
+  border-left: 3px solid var(--color-brand);
+  padding-left: 1.25rem;
+  color: var(--color-muted);
+}
+
+.insight-body hr {
+  margin-top: 3rem;
+  border: 0;
+  border-top: 1px solid var(--color-brand-border);
+}
+
+.insight-body code {
+  background: var(--color-brand-light);
+  border-radius: 3px;
+  padding: 0.1em 0.35em;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.9em;
+}
+
+.insight-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.insight-body th,
+.insight-body td {
+  border: 1px solid var(--color-brand-border);
+  padding: 0.6rem 0.8rem;
+  text-align: left;
+}
+
+.insight-body th {
+  background: var(--color-brand-light);
+  font-weight: 600;
+}

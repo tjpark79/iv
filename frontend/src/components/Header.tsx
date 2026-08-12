@@ -5,11 +5,11 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import Logo from "./Logo";
 
-// 홈이 아닌 라우트(404 등)에서도 동작하도록 절대 경로 + 해시로 둔다.
-// 홈에서는 경로가 같으므로 브라우저가 같은 문서 내 앵커 이동으로 처리한다.
+// 아직 페이지로 분리하지 않은 항목은 홈의 앵커를 가리킨다. /about이 생기면
+// "이력"을 그쪽으로 옮긴다.
 const NAV_LINKS = [
-  { href: "/#services", label: "Vision" },
-  { href: "/#portfolio", label: "서비스" },
+  { href: "/services", label: "서비스" },
+  { href: "/insights", label: "인사이트" },
   { href: "/#about", label: "이력" },
 ];
 
