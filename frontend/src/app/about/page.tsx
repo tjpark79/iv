@@ -2,16 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Team from "@/components/Team";
-import Clients from "@/components/Clients";
 import Timeline from "@/components/Timeline";
-import {
-  ABOUT_INTRO,
-  WORKING_PRINCIPLES,
-  getClients,
-  getTeam,
-  getTimeline,
-} from "@/lib/content";
+import { ABOUT_INTRO, WORKING_PRINCIPLES, getTimeline } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "회사 소개 | 인터벤처스",
@@ -24,8 +16,6 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   const timeline = getTimeline();
-  const team = getTeam();
-  const clients = getClients();
 
   return (
     <>
@@ -70,19 +60,6 @@ export default function AboutPage() {
         </section>
 
         <Timeline entries={timeline} />
-
-        <Team members={team} />
-
-        <section className="py-20 md:py-24 bg-white">
-          <div className="mx-auto max-w-6xl px-6">
-            <div className="max-w-xl mb-10">
-              <h2 className="section-heading text-3xl md:text-4xl font-bold text-foreground">
-                함께한 기업
-              </h2>
-            </div>
-          </div>
-          <Clients clients={clients} />
-        </section>
 
         <section className="py-16 bg-brand-light">
           <div className="mx-auto max-w-4xl px-6">

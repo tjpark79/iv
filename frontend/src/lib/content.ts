@@ -37,23 +37,6 @@ export type TimelineEntry = {
   image_url: string;
 };
 
-export type TeamMember = {
-  id: number;
-  order: number;
-  name: string;
-  role: string;
-  bio: string;
-  photo_url: string;
-};
-
-export type Client = {
-  id: number;
-  order: number;
-  name: string;
-  logo_url: string;
-  link_url: string;
-};
-
 const SERVICES: Service[] = [
   {
     id: 1,
@@ -292,12 +275,6 @@ const TIMELINE_ENTRIES: TimelineEntry[] = [
   },
 ];
 
-const TEAM_MEMBERS: TeamMember[] = [];
-
-const CLIENTS: Client[] = [];
-
 export const getServices = () => SERVICES;
 export const getPortfolio = () => PORTFOLIO_ITEMS;
 export const getTimeline = () => TIMELINE_ENTRIES;
-export const getTeam = () => TEAM_MEMBERS;
-export const getClients = () => CLIENTS;
