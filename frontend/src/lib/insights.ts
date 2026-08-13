@@ -102,7 +102,8 @@ export function getAllInsights(): InsightMeta[] {
       const raw = fs.readFileSync(path.join(INSIGHTS_DIR, `${slug}.md`), "utf8");
       return parseMeta(slug, matter(raw).data);
     })
-    .sort((a, b) => b.date.localeCompare(a.date));
+    // 날짜가 같은 글의 순서가 파일시스템 순서에 좌우되지 않도록 slug로 묶는다.
+    .sort((a, b) => b.date.localeCompare(a.date) || a.slug.localeCompare(b.slug));
 }
 
 /** 본문용. 없는 slug면 null을 돌려준다(호출부에서 notFound 처리). */

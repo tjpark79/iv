@@ -9,9 +9,9 @@ import {
 } from "@/lib/investment";
 
 export const metadata: Metadata = {
-  title: "투자 | 인터벤처스",
+  title: "모음집 | 인터벤처스",
   description:
-    "인터벤처스가 운영하는 투자 도구를 모았습니다. 국내외 ETF 지표 비교, 포트폴리오 시뮬레이션, 연금저축·IRP·ISA 절세계좌 가이드와 수령액 계산기를 제공합니다.",
+    "인터벤처스가 따로 운영하는 도구를 모았습니다. 국내외 ETF 지표 비교, 포트폴리오 시뮬레이션, 연금저축·IRP·ISA 절세계좌 가이드와 수령액 계산기를 제공합니다.",
   alternates: {
     canonical: "/investment",
   },
@@ -83,13 +83,13 @@ export default function InvestmentPage() {
         <section className="bg-brand py-20 md:py-28">
           <div className="mx-auto max-w-4xl px-6">
             <h1 className="section-heading text-4xl md:text-5xl font-bold text-white">
-              투자
+              모음집
             </h1>
             <p className="mt-6 max-w-2xl text-white/80 leading-relaxed">
-              기업을 분석하던 방식은 자기 돈을 굴릴 때도 그대로 쓰입니다.
-              인터벤처스는 ETF 지표를 모아 비교하고 연금 계좌를 설계해 보는
-              도구를 따로 운영하고 있습니다. 아래 항목을 누르면 해당 사이트로
-              이동합니다.
+              인터벤처스가 본업과 별개로 만들어 운영하는 도구를 모았습니다.
+              기업을 분석하던 방식은 자기 돈을 굴릴 때도 그대로 쓰입니다. ETF
+              지표를 모아 비교하고 연금 계좌를 설계해 보는 도구가 여기 있습니다.
+              항목을 누르면 해당 사이트로 이동합니다.
             </p>
           </div>
         </section>
