@@ -5,6 +5,7 @@ import { BUSINESS } from "@/lib/site";
 const SITE_LINKS = [
   { href: "/about", label: "회사 소개" },
   { href: "/services", label: "서비스" },
+  { href: "/investment", label: "투자" },
   { href: "/insights", label: "인사이트" },
   { href: "/contact", label: "문의" },
 ];

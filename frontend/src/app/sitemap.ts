@@ -28,6 +28,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: `${SITE_URL}/investment`,
+      lastModified: CONTENT_UPDATED_AT,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
       url: `${SITE_URL}/insights`,
       lastModified: CONTENT_UPDATED_AT,
       changeFrequency: "weekly",
