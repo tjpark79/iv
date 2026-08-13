@@ -13,12 +13,9 @@ export const metadata: Metadata = {
   },
 };
 
-const SERIES_ORDER: SeriesKey[] = [
-  "equity",
-  "finance",
-  "fundraising",
-  "operations",
-];
+// SERIES에서 파생시킨다. 손으로 나열하면 시리즈를 추가했을 때 집계 칩이
+// 조용히 빠진다. 표시 순서는 SERIES의 선언 순서를 그대로 따른다.
+const SERIES_ORDER = Object.keys(SERIES) as SeriesKey[];
 
 export default function InsightsPage() {
   const posts = getAllInsights();

@@ -23,7 +23,8 @@
   빠지면 빌드가 실패합니다. `series`는 `equity` / `finance` / `fundraising` /
   `operations` 중 하나입니다.
 * **서비스·이력 문구**: `src/lib/content.ts`
-* **투자 도구 목록**: `src/lib/investment.ts` (P/world의 `categories.ts`와 같은 규약)
+* **모음집(투자 도구) 목록**: `src/lib/collection.ts` (P/world의 `categories.ts`와 같은 규약).
+  페이지는 `/collection`이며 `/investment`는 308로 넘어옵니다.
 * **사업자 정보·도메인**: `src/lib/site.ts`
 
 ## 배포

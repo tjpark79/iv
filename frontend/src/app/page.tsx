@@ -27,8 +27,11 @@ export const metadata: Metadata = {
 export default function Home() {
   const services = getServices();
   const portfolio = getPortfolio();
-  // 이력 전체는 /about에만 둔다. 홈에는 대표 경력 3건만 짧게 보여준다.
-  const career = getTimeline().slice(1, 4);
+  // 이력 전체는 /about에만 둔다. 홈에는 인터벤처스 이전의 경력만 짧게 보여준다.
+  // 인덱스로 자르면 이력을 추가할 때 조용히 어긋나므로 이름으로 거른다.
+  const career = getTimeline()
+    .filter((entry) => entry.organization !== "인터벤처스")
+    .slice(0, 3);
   const latestPosts = getAllInsights().slice(0, 3);
 
   return (

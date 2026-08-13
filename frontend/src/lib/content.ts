@@ -24,7 +24,6 @@ export type PortfolioItem = {
   category: string;
   duration: string;
   thumbnail_url: string;
-  full_image_url: string;
 };
 
 export type TimelineEntry = {
@@ -34,7 +33,6 @@ export type TimelineEntry = {
   organization: string;
   description: string;
   highlights: string;
-  image_url: string;
 };
 
 const SERVICES: Service[] = [
@@ -81,7 +79,6 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     category: "Finance, Strategy, Consulting",
     duration: "업무협약 기간 내 지속",
     thumbnail_url: "/portfolio/01-thumbnail.jpg",
-    full_image_url: "/portfolio/01-full.jpg",
   },
   {
     id: 2,
@@ -102,7 +99,6 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     category: "Finance, Consulting",
     duration: "평균 2개월 이내",
     thumbnail_url: "/portfolio/02-thumbnail.jpg",
-    full_image_url: "/portfolio/02-full.jpg",
   },
   {
     id: 3,
@@ -123,7 +119,6 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     category: "Strategy, Consulting",
     duration: "업무협약 기간 내 지속",
     thumbnail_url: "/portfolio/03-thumbnail.jpg",
-    full_image_url: "/portfolio/03-full.jpg",
   },
   {
     id: 4,
@@ -144,7 +139,6 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     category: "Lecture",
     duration: "1회 시간별 맞춤 가능",
     thumbnail_url: "/portfolio/04-thumbnail.jpg",
-    full_image_url: "/portfolio/04-full.jpg",
   },
   {
     id: 5,
@@ -165,7 +159,6 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     category: "Reporting",
     duration: "IR 리포트 1달 내외 / 백서 2달 내외",
     thumbnail_url: "/portfolio/05-thumbnail.jpg",
-    full_image_url: "/portfolio/05-full.jpg",
   },
   {
     id: 6,
@@ -186,7 +179,6 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     category: "Mentoring",
     duration: "유동적",
     thumbnail_url: "/portfolio/06-thumbnail.jpg",
-    full_image_url: "/portfolio/06-full.jpg",
   },
 ];
 
@@ -244,7 +236,6 @@ const TIMELINE_ENTRIES: TimelineEntry[] = [
       "다수의 정부지원센터와 협업하여 스타트업 지원\n경영 전략 수립, 재무 모델링 도입 등 다수의 비상장사 성장 지원",
     highlights:
       "빅뱅엔젤스 책임멘토\n포스코IMP 지도위원 역임\n한국특허정보원 보육기업 강사\n서울창조경제혁신센터 민간 투자유치 연계지원사업 컨설팅\n울산창조경제혁신센터 U-STAR 글로벌 프로그램 컨설팅, 보육기업 강의\n인천창조경제혁신센터 글로벌 엑셀러레이팅 베트남 진출 컨설팅 및 IR리포트 제작\n연세대학교 제30대, 31대 스타트업/창업 분과 상임이사",
-    image_url: "/about/4.jpg",
   },
   {
     id: 2,
@@ -253,7 +244,6 @@ const TIMELINE_ENTRIES: TimelineEntry[] = [
     organization: "신한BNPParibas자산운용",
     description: "Equity Fund Manager\nEquity Analyst",
     highlights: "",
-    image_url: "/about/3.jpg",
   },
   {
     id: 3,
@@ -262,7 +252,6 @@ const TIMELINE_ENTRIES: TimelineEntry[] = [
     organization: "우리투자증권 (現 NH투자증권)",
     description: "Research Center\nIT Analyst",
     highlights: "",
-    image_url: "/about/2.jpg",
   },
   {
     id: 4,
@@ -271,7 +260,6 @@ const TIMELINE_ENTRIES: TimelineEntry[] = [
     organization: "삼성전자",
     description: "생산관리\nSCM 최적화 및 고도화 업무",
     highlights: "",
-    image_url: "/about/1.jpg",
   },
 ];
 

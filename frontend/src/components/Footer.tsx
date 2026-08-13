@@ -66,8 +66,10 @@ export default function Footer() {
           </nav>
         </div>
 
+        {/* 전 페이지가 빌드 시점에 정적 생성되므로 new Date()를 쓰면 배포한 해에
+            연도가 고정된다. 해가 바뀌어도 틀리지 않도록 연도를 넣지 않는다. */}
         <p className="mt-12 border-t border-white/15 pt-6 text-sm text-white/50">
-          &copy; {new Date().getFullYear()} interVentures. All Rights Reserved.
+          &copy; interVentures. All Rights Reserved.
         </p>
       </div>
     </footer>

@@ -61,12 +61,15 @@ export default function ServicesPage() {
                   className="scroll-mt-24 border-t border-brand-border pt-8"
                 >
                   <div className="flex items-start gap-6">
+                    {/* 이 이미지는 sm 미만에서 렌더되지 않는다. priority를 주면
+                        모바일에도 preload 링크가 나가 보이지도 않는 파일을
+                        내려받게 되므로 쓰지 않는다. */}
                     <div className="relative hidden sm:block h-20 w-28 shrink-0 overflow-hidden rounded-sm">
                       <Image
                         src={item.thumbnail_url}
                         alt=""
                         fill
-                        priority={i === 0}
+                        loading="lazy"
                         className="object-cover"
                         sizes="112px"
                       />

@@ -1,7 +1,7 @@
 ---
 title: 우선주와 사채, 지금 무엇을 발행하는 건가
 description: CPS, RPS, RCPS, CB, BW를 한 번에 정리합니다. 자본으로 들어오는지 부채로 들어오는지, 옵션을 행사할 때 추가 납입이 있는지가 갈림길입니다.
-date: 2026-08-14
+date: 2026-08-13
 series: finance
 tags: [투자유치, RCPS, 전환사채, 재무]
 ---

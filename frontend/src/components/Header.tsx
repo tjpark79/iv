@@ -37,14 +37,19 @@ export default function Header() {
         <button
           className="md:hidden text-foreground"
           onClick={() => setOpen((v) => !v)}
-          aria-label="메뉴 열기"
+          aria-label={open ? "메뉴 닫기" : "메뉴 열기"}
+          aria-expanded={open}
+          aria-controls="mobile-nav"
         >
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
       {open && (
-        <nav className="md:hidden border-t border-brand-border bg-white px-6 py-4 flex flex-col gap-4">
+        <nav
+          id="mobile-nav"
+          className="md:hidden border-t border-brand-border bg-white px-6 py-4 flex flex-col gap-4"
+        >
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}

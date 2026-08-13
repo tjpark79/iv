@@ -127,10 +127,20 @@ body {
   font-size: 0.9em;
 }
 
+/* 마크다운이 만든 표에는 래퍼를 붙일 수 없다. 표 자체를 스크롤 컨테이너로
+   만들어, 열이 많은 표가 페이지 전체를 가로로 밀지 않게 한다. */
 .prose-body table {
-  width: 100%;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow-x: auto;
   border-collapse: collapse;
   font-size: 0.9375rem;
+}
+
+.prose-body td,
+.prose-body th {
+  white-space: normal;
 }
 
 .prose-body th,
