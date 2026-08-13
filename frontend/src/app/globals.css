@@ -40,17 +40,18 @@ body {
   letter-spacing: -0.01em;
 }
 
-/* 인사이트 본문. 마크다운을 변환한 HTML이라 클래스를 붙일 수 없어 요소 선택자로 쓴다. */
-.insight-body {
+/* 인사이트 본문과 법적 고지가 공유하는 본문 스타일. 마크다운을 변환한 HTML에는
+   클래스를 붙일 수 없어 요소 선택자로 쓴다. */
+.prose-body {
   color: var(--foreground);
   line-height: 1.85;
 }
 
-.insight-body > * + * {
+.prose-body > * + * {
   margin-top: 1.25rem;
 }
 
-.insight-body h2 {
+.prose-body h2 {
   margin-top: 3rem;
   font-size: 1.375rem;
   font-weight: 700;
@@ -59,66 +60,66 @@ body {
   border-top: 1px solid var(--color-brand-border);
 }
 
-.insight-body h3 {
+.prose-body h3 {
   margin-top: 2.25rem;
   font-size: 1.0625rem;
   font-weight: 600;
   color: var(--color-brand);
 }
 
-.insight-body ul,
-.insight-body ol {
+.prose-body ul,
+.prose-body ol {
   padding-left: 1.25rem;
 }
 
-.insight-body ul {
+.prose-body ul {
   list-style: none;
   padding-left: 0;
 }
 
-.insight-body ul > li {
+.prose-body ul > li {
   position: relative;
   padding-left: 1rem;
 }
 
-.insight-body ul > li::before {
+.prose-body ul > li::before {
   content: "•";
   position: absolute;
   left: 0;
   color: var(--color-brand);
 }
 
-.insight-body ol {
+.prose-body ol {
   list-style: decimal;
 }
 
-.insight-body li + li {
+.prose-body li + li {
   margin-top: 0.5rem;
 }
 
-.insight-body strong {
+.prose-body strong {
   font-weight: 600;
 }
 
-.insight-body a {
+.prose-body a {
   color: var(--color-brand);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
-.insight-body blockquote {
+.prose-body blockquote {
   border-left: 3px solid var(--color-brand);
   padding-left: 1.25rem;
   color: var(--color-muted);
 }
 
-.insight-body hr {
+.prose-body hr {
   margin-top: 3rem;
   border: 0;
   border-top: 1px solid var(--color-brand-border);
 }
 
-.insight-body code {
+.prose-body code {
   background: var(--color-brand-light);
   border-radius: 3px;
   padding: 0.1em 0.35em;
@@ -126,20 +127,20 @@ body {
   font-size: 0.9em;
 }
 
-.insight-body table {
+.prose-body table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.9375rem;
 }
 
-.insight-body th,
-.insight-body td {
+.prose-body th,
+.prose-body td {
   border: 1px solid var(--color-brand-border);
   padding: 0.6rem 0.8rem;
   text-align: left;
 }
 
-.insight-body th {
+.prose-body th {
   background: var(--color-brand-light);
   font-weight: 600;
 }

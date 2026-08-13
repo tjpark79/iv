@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { CONTENT_UPDATED_AT, SITE_URL } from "@/lib/site";
+import { CONTENT_UPDATED_AT, LEGAL_EFFECTIVE_DATE, SITE_URL } from "@/lib/site";
 import { getAllInsights } from "@/lib/insights";
 
 /**
@@ -16,6 +16,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
+      url: `${SITE_URL}/about`,
+      lastModified: CONTENT_UPDATED_AT,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
       url: `${SITE_URL}/services`,
       lastModified: CONTENT_UPDATED_AT,
       changeFrequency: "monthly",
@@ -26,6 +32,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: CONTENT_UPDATED_AT,
       changeFrequency: "weekly",
       priority: 0.8,
+    },
+    {
+      url: `${SITE_URL}/contact`,
+      lastModified: CONTENT_UPDATED_AT,
+      changeFrequency: "yearly",
+      priority: 0.5,
+    },
+    {
+      url: `${SITE_URL}/privacy`,
+      lastModified: LEGAL_EFFECTIVE_DATE,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: `${SITE_URL}/terms`,
+      lastModified: LEGAL_EFFECTIVE_DATE,
+      changeFrequency: "yearly",
+      priority: 0.3,
     },
   ];
 

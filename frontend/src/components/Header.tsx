@@ -5,12 +5,10 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import Logo from "./Logo";
 
-// 아직 페이지로 분리하지 않은 항목은 홈의 앵커를 가리킨다. /about이 생기면
-// "이력"을 그쪽으로 옮긴다.
 const NAV_LINKS = [
+  { href: "/about", label: "회사 소개" },
   { href: "/services", label: "서비스" },
   { href: "/insights", label: "인사이트" },
-  { href: "/#about", label: "이력" },
 ];
 
 export default function Header() {

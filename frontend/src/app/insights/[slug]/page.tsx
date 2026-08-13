@@ -103,7 +103,7 @@ export default async function InsightPage({
           <div className="py-16 md:py-24 bg-white">
             <div className="mx-auto max-w-3xl px-6">
               <div
-                className="insight-body"
+                className="prose-body"
                 dangerouslySetInnerHTML={{ __html: post.html }}
               />
 
