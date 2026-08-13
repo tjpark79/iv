@@ -1,5 +1,5 @@
 /**
- * 투자 도구 레지스트리 — /investment 페이지의 단일 진실 공급원.
+ * 모음집 레지스트리 — /collection 페이지의 단일 진실 공급원.
  *
  * P/world의 src/config/categories.ts와 같은 규약을 쓴다. 도구가 늘어나면 이
  * 파일에 항목 하나만 추가하면 페이지와 sitemap에 함께 반영된다.
@@ -11,7 +11,7 @@
 
 export type ItemKind = "대시보드" | "자료" | "시뮬레이터" | "계산기";
 
-export type InvestmentItem = {
+export type CollectionItem = {
   title: string;
   desc: string;
   kind: ItemKind;
@@ -21,14 +21,14 @@ export type InvestmentItem = {
   host?: string;
 };
 
-export type InvestmentGroup = {
+export type CollectionGroup = {
   slug: string;
   name: string;
   desc: string;
-  items: InvestmentItem[];
+  items: CollectionItem[];
 };
 
-export const INVESTMENT_GROUPS: InvestmentGroup[] = [
+export const COLLECTION_GROUPS: CollectionGroup[] = [
   {
     slug: "etf",
     name: "ETF",
@@ -69,7 +69,7 @@ export const INVESTMENT_GROUPS: InvestmentGroup[] = [
   },
 ];
 
-export function itemHost(item: InvestmentItem): string | undefined {
+export function itemHost(item: CollectionItem): string | undefined {
   if (item.host) return item.host;
   if (!item.url) return undefined;
   return new URL(item.url).host;

@@ -7,6 +7,19 @@ const nextConfig: NextConfig = {
     // /public의 원본 파일을 그대로 서빙한다.
     unoptimized: true,
   },
+
+  async redirects() {
+    return [
+      {
+        // 모음집을 /investment로 먼저 배포했다가 /collection으로 옮겼다.
+        // sitemap에 이미 올라간 주소라 죽는 링크가 되지 않도록 넘겨준다.
+        // permanent는 301이 아니라 308을 낸다(구글은 동일하게 처리).
+        source: "/investment",
+        destination: "/collection",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

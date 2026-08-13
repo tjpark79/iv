@@ -8,7 +8,7 @@ import Logo from "./Logo";
 const NAV_LINKS = [
   { href: "/about", label: "회사 소개" },
   { href: "/services", label: "서비스" },
-  { href: "/investment", label: "모음집" },
+  { href: "/collection", label: "모음집" },
   { href: "/insights", label: "인사이트" },
 ];
 

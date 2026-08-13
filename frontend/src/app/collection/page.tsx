@@ -3,21 +3,21 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import {
-  INVESTMENT_GROUPS,
+  COLLECTION_GROUPS,
   itemHost,
-  type InvestmentItem,
-} from "@/lib/investment";
+  type CollectionItem,
+} from "@/lib/collection";
 
 export const metadata: Metadata = {
   title: "모음집 | 인터벤처스",
   description:
     "인터벤처스가 따로 운영하는 도구를 모았습니다. 국내외 ETF 지표 비교, 포트폴리오 시뮬레이션, 연금저축·IRP·ISA 절세계좌 가이드와 수령액 계산기를 제공합니다.",
   alternates: {
-    canonical: "/investment",
+    canonical: "/collection",
   },
 };
 
-function ItemCard({ item }: { item: InvestmentItem }) {
+function ItemCard({ item }: { item: CollectionItem }) {
   const host = itemHost(item);
 
   // url이 없는 항목은 링크가 아니라 점선 카드로 둔다.
@@ -75,7 +75,7 @@ function ItemCard({ item }: { item: InvestmentItem }) {
   );
 }
 
-export default function InvestmentPage() {
+export default function CollectionPage() {
   return (
     <>
       <Header />
@@ -96,7 +96,7 @@ export default function InvestmentPage() {
 
         <section className="py-20 md:py-28 bg-white">
           <div className="mx-auto max-w-4xl px-6 space-y-16">
-            {INVESTMENT_GROUPS.map((group) => (
+            {COLLECTION_GROUPS.map((group) => (
               <div key={group.slug} id={group.slug} className="scroll-mt-24">
                 <h2 className="section-heading text-2xl md:text-3xl font-bold text-foreground border-t border-brand-border pt-8">
                   {group.name}
