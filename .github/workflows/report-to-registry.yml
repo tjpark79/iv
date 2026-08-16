@@ -1,0 +1,75 @@
+# 각 프로젝트 리포에 복사해 넣는 워크플로.
+#   → <프로젝트>/.github/workflows/report-to-registry.yml
+#
+# 하는 일: 배포가 끝나면 자기 project.yml 과 실제 의존성 버전을
+#          레지스트리 리포에 적어 보낸다.
+#
+# ── 붙이기 전에 준비할 것 ────────────────────────────────────────────────
+# 1. 이 리포 루트에 project.yml 을 둔다 (레지스트리의 drafts/ 에 초안이 있다)
+# 2. 리포 Settings → Secrets → Actions 에 REGISTRY_TOKEN 을 추가한다
+#    - tjpark79 계정에서 만든 fine-grained PAT
+#    - Repository access: tjpark79/registry **한 곳만**
+#    - Permissions: Contents = Read and write
+#    - 이 토큰은 만든 사람 자격으로 동작하므로 nick798 소유 리포에서도 그대로 쓴다
+#
+# 이 토큰이 유출돼도 남의 계정을 건드릴 수 없다. 레지스트리 한 곳에
+# 엉뚱한 값을 쓰는 게 전부이고, 그건 이력에 남아 되돌릴 수 있다.
+
+name: 레지스트리 보고
+
+on:
+  push:
+    branches: [main]
+  # 배포 워크플로가 따로 있다면 그쪽 끝에서 부르는 편이 정확하다.
+  workflow_dispatch:
+
+# 이 워크플로는 자기 리포에 아무것도 쓰지 않는다.
+permissions:
+  contents: read
+
+concurrency:
+  group: report-to-registry
+  cancel-in-progress: true
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: 레지스트리에 보고
+        env:
+          REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN }}
+          # 배포 주소를 아는 워크플로라면 여기에 넘긴다. 모르면 비워 둔다 —
+          # 추측한 주소를 적느니 비어 있는 편이 낫다.
+          DEPLOY_URL: ''
+          DEPLOY_ENV: production
+        run: |
+          # 토큰이 아직 없으면 조용히 건너뛴다.
+          #
+          # 여기서 실패시키면 리포마다 빨간 X 가 남는데, 그건 "고칠 것"이 아니라
+          # "아직 연결 안 함"이다. CI 를 거짓으로 붉히면 진짜 실패를 못 알아본다.
+          # 보고가 없다는 사실은 레지스트리의 /drift/ 가
+          # "보고가 한 번도 없음"으로 알려 주므로 놓치지 않는다.
+          if [ -z "$REGISTRY_TOKEN" ]; then
+            echo "REGISTRY_TOKEN 이 없어 레지스트리 보고를 건너뜁니다."
+            echo "Settings → Secrets and variables → Actions 에 추가하면 다음 배포부터 보고합니다."
+            exit 0
+          fi
+
+          # 보고 스크립트는 레지스트리에서 그때그때 받아 쓴다.
+          # 프로젝트마다 복사해 두면 고칠 때 8곳을 따라다녀야 한다.
+          for f in report.mjs secret-scan.mjs; do
+            curl -fsSL \
+              -H "Authorization: Bearer $REGISTRY_TOKEN" \
+              -H "Accept: application/vnd.github.raw" \
+              "https://api.github.com/repos/tjpark79/registry/contents/scripts/$f" \
+              -o "$RUNNER_TEMP/$f"
+          done
+          # secret-scan 이 project.yml 에서 비밀로 보이는 값을 찾으면
+          # 보내지 않고 여기서 실패한다. 레지스트리 이력에 남기지 않으려는 것이다.
+          node "$RUNNER_TEMP/report.mjs" project.yml
