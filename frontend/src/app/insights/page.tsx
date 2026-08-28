@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { SERIES, getAllInsights, type SeriesKey } from "@/lib/insights";
+import InsightList from "@/components/InsightList";
+import { getAllInsights } from "@/lib/insights";
 
 export const metadata: Metadata = {
   title: "인사이트 | 인터벤처스",
@@ -13,16 +14,8 @@ export const metadata: Metadata = {
   },
 };
 
-// SERIES에서 파생시킨다. 손으로 나열하면 시리즈를 추가했을 때 집계 칩이
-// 조용히 빠진다. 표시 순서는 SERIES의 선언 순서를 그대로 따른다.
-const SERIES_ORDER = Object.keys(SERIES) as SeriesKey[];
-
 export default function InsightsPage() {
   const posts = getAllInsights();
-  const countBySeries = new Map<SeriesKey, number>();
-  for (const post of posts) {
-    countBySeries.set(post.series, (countBySeries.get(post.series) ?? 0) + 1);
-  }
 
   return (
     <>
@@ -46,59 +39,7 @@ export default function InsightsPage() {
             {posts.length === 0 ? (
               <p className="text-muted">아직 등록된 글이 없습니다.</p>
             ) : (
-              <>
-                <div className="mb-14 flex flex-wrap gap-x-6 gap-y-2 text-sm">
-                  {SERIES_ORDER.map((key) => (
-                    <span key={key} className="text-muted">
-                      {SERIES[key]}
-                      <span className="ml-1.5 font-mono text-brand">
-                        {countBySeries.get(key) ?? 0}
-                      </span>
-                    </span>
-                  ))}
-                </div>
-
-                <ul className="divide-y divide-brand-border border-t border-b border-brand-border">
-                  {posts.map((post) => (
-                    <li key={post.slug}>
-                      <Link
-                        href={`/insights/${post.slug}`}
-                        className="block py-8 group"
-                      >
-                        <div className="flex flex-wrap items-center gap-3 text-xs">
-                          <span className="text-brand font-medium">
-                            {SERIES[post.series]}
-                          </span>
-                          <time
-                            dateTime={post.date}
-                            className="font-mono text-muted"
-                          >
-                            {post.date}
-                          </time>
-                        </div>
-                        <h2 className="mt-3 text-xl font-semibold text-foreground group-hover:text-brand transition-colors">
-                          {post.title}
-                        </h2>
-                        <p className="mt-2 text-sm text-muted leading-relaxed">
-                          {post.description}
-                        </p>
-                        {post.tags.length > 0 && (
-                          <div className="mt-3 flex flex-wrap gap-2">
-                            {post.tags.map((tag) => (
-                              <span
-                                key={tag}
-                                className="rounded-sm bg-brand-light px-2 py-0.5 text-xs text-brand"
-                              >
-                                {tag}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </>
+              <InsightList posts={posts} />
             )}
 
             <p className="mt-14 text-sm text-muted leading-relaxed">

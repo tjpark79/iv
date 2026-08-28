@@ -4,6 +4,11 @@ import matter from "gray-matter";
 import { remark } from "remark";
 import remarkGfm from "remark-gfm";
 import remarkHtml from "remark-html";
+import { SERIES, type InsightMeta, type SeriesKey } from "./series";
+
+// 지금까지 이 모듈에서 가져다 쓰던 곳이 많아 그대로 다시 내보낸다.
+export { SERIES };
+export type { InsightMeta, SeriesKey };
 
 /**
  * 인사이트 글은 content/insights/*.md 파일이다. DB를 두지 않는 이유와 같다 —
@@ -11,26 +16,6 @@ import remarkHtml from "remark-html";
  * 사라지지 않는다. 글을 추가하려면 이 폴더에 .md 파일 하나만 넣으면 된다.
  */
 const INSIGHTS_DIR = path.join(process.cwd(), "content", "insights");
-
-/** 글이 속한 시리즈. 목록 페이지의 분류로 쓴다. */
-export const SERIES = {
-  equity: "지분과 자본구조",
-  finance: "숫자와 재무계획",
-  fundraising: "투자유치와 IR",
-  operations: "창업 초기 운영",
-} as const;
-
-export type SeriesKey = keyof typeof SERIES;
-
-export type InsightMeta = {
-  slug: string;
-  title: string;
-  description: string;
-  /** YYYY-MM-DD */
-  date: string;
-  series: SeriesKey;
-  tags: string[];
-};
 
 export type Insight = InsightMeta & {
   /** 마크다운을 변환한 HTML */
