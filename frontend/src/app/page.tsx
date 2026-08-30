@@ -85,8 +85,10 @@ export default function Home() {
         <section id="about" className="py-24 md:py-32 bg-white">
           <div className="mx-auto max-w-6xl px-6 grid gap-12 md:grid-cols-2">
             <div>
+              {/* 옆에 붙는 목록이 회사 연혁이 아니라 대표 개인의 경력이라
+                  제목도 사람 쪽으로 맞춘다. */}
               <h2 className="section-heading text-3xl md:text-4xl font-bold text-foreground">
-                인터벤처스
+                박태준 대표
               </h2>
               <p className="mt-6 text-muted leading-relaxed">
                 {HOME_ABOUT_SUMMARY}
@@ -95,7 +97,7 @@ export default function Home() {
                 href="/about"
                 className="mt-8 inline-block text-sm font-medium text-brand hover:text-brand-dark transition-colors"
               >
-                회사 소개 자세히 보기
+                대표 이력 자세히 보기
               </Link>
             </div>
 
