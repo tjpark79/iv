@@ -7,15 +7,14 @@ import {
   itemHost,
   type CollectionItem,
 } from "@/lib/collection";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "모음집 | 인터벤처스",
   description:
     "인터벤처스가 따로 운영하는 도구를 모았습니다. 국내외 ETF 지표 비교, 포트폴리오 시뮬레이션, 연금저축·IRP·ISA 절세계좌 가이드와 수령액 계산기를 제공합니다.",
-  alternates: {
-    canonical: "/collection",
-  },
-};
+  path: "/collection",
+});
 
 function ItemCard({ item }: { item: CollectionItem }) {
   const host = itemHost(item);

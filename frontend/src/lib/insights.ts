@@ -20,9 +20,24 @@ const INSIGHTS_DIR = path.join(process.cwd(), "content", "insights");
 export type Insight = InsightMeta & {
   /** 마크다운을 변환한 HTML */
   html: string;
-  /** 본문 글자 수(공백 제외). 목록에서 분량을 가늠하는 용도. */
-  charCount: number;
 };
+
+/**
+ * 빌드 한 번 동안만 쓰는 메모. 같은 글을 generateMetadata와 본문에서 각각
+ * 읽어 remark를 두 번 돌리던 것을 없앤다. React의 cache()를 쓰지 않은 이유는
+ * sitemap.ts와 generateStaticParams가 렌더 밖에서 호출되기 때문이다.
+ *
+ * 개발 모드에서는 캐시하지 않는다. .md는 import가 아니라 파일로 읽으므로,
+ * 캐시가 남으면 글을 고쳐도 새로고침에 반영되지 않는다.
+ */
+const memo = new Map<string, unknown>();
+const CACHEABLE = process.env.NODE_ENV === "production";
+
+function once<T>(key: string, make: () => T): T {
+  if (!CACHEABLE) return make();
+  if (!memo.has(key)) memo.set(key, make());
+  return memo.get(key) as T;
+}
 
 function isSeriesKey(value: unknown): value is SeriesKey {
   return typeof value === "string" && value in SERIES;
@@ -82,31 +97,36 @@ function readSlugs(): string[] {
 
 /** 목록용. 본문 변환 없이 프론트매터만 읽어 최신순으로 돌려준다. */
 export function getAllInsights(): InsightMeta[] {
-  return readSlugs()
-    .map((slug) => {
-      const raw = fs.readFileSync(path.join(INSIGHTS_DIR, `${slug}.md`), "utf8");
-      return parseMeta(slug, matter(raw).data);
-    })
-    // 날짜가 같은 글의 순서가 파일시스템 순서에 좌우되지 않도록 slug로 묶는다.
-    .sort((a, b) => b.date.localeCompare(a.date) || a.slug.localeCompare(b.slug));
+  return once("all", () =>
+    readSlugs()
+      .map((slug) => {
+        const raw = fs.readFileSync(
+          path.join(INSIGHTS_DIR, `${slug}.md`),
+          "utf8"
+        );
+        return parseMeta(slug, matter(raw).data);
+      })
+      // 날짜가 같은 글의 순서가 파일시스템 순서에 좌우되지 않도록 slug로 묶는다.
+      .sort(
+        (a, b) => b.date.localeCompare(a.date) || a.slug.localeCompare(b.slug)
+      )
+  );
 }
 
 /** 본문용. 없는 slug면 null을 돌려준다(호출부에서 notFound 처리). */
-export async function getInsight(slug: string): Promise<Insight | null> {
-  const file = path.join(INSIGHTS_DIR, `${slug}.md`);
-  if (!fs.existsSync(file)) return null;
+export function getInsight(slug: string): Promise<Insight | null> {
+  return once(`post:${slug}`, async (): Promise<Insight | null> => {
+    const file = path.join(INSIGHTS_DIR, `${slug}.md`);
+    if (!fs.existsSync(file)) return null;
 
-  const { data, content } = matter(fs.readFileSync(file, "utf8"));
-  const processed = await remark()
-    .use(remarkGfm)
-    .use(remarkHtml)
-    .process(content);
+    const { data, content } = matter(fs.readFileSync(file, "utf8"));
+    const processed = await remark()
+      .use(remarkGfm)
+      .use(remarkHtml)
+      .process(content);
 
-  return {
-    ...parseMeta(slug, data),
-    html: String(processed),
-    charCount: content.replace(/\s/g, "").length,
-  };
+    return { ...parseMeta(slug, data), html: String(processed) };
+  });
 }
 
 export function formatDate(date: string): string {

@@ -4,15 +4,14 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import InsightList from "@/components/InsightList";
 import { getAllInsights } from "@/lib/insights";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "인사이트 | 인터벤처스",
   description:
     "창업 초기에 마주치는 지분·재무·투자유치 문제를 다룹니다. 증권사 리서치와 자산운용 현장에서 쓰던 기준으로, 스타트업 대표들이 실제로 겪는 결정들을 정리합니다.",
-  alternates: {
-    canonical: "/insights",
-  },
-};
+  path: "/insights",
+});
 
 export default function InsightsPage() {
   const posts = getAllInsights();

@@ -2,15 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import LegalLayout from "@/components/LegalLayout";
 import { AFFILIATE, BUSINESS } from "@/lib/site";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "이용약관 | 인터벤처스",
   description:
     "(주)인터벤처스 웹사이트 이용약관입니다. 본 사이트가 제공하는 정보는 참고용이며 개별 사안에 대한 법률·세무·투자 자문을 대체하지 않습니다.",
-  alternates: {
-    canonical: "/terms",
-  },
-};
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

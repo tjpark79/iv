@@ -3,15 +3,14 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { BUSINESS, SITE_NAME, SITE_URL } from "@/lib/site";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "문의 | 인터벤처스",
   description:
     "(주)인터벤처스 연락처입니다. 경영전략·재무기획·투자유치 관련 문의는 이메일로 보내주시면 확인 후 회신드립니다.",
-  alternates: {
-    canonical: "/contact",
-  },
-};
+  path: "/contact",
+});
 
 const MAIL_SUBJECT = "인터벤처스 컨설팅 문의";
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { SITE_URL } from "@/lib/site";
+import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/lib/site";
+import { pageMetadata } from "@/lib/metadata";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -16,8 +17,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   // 상대 경로 canonical / OG URL이 이 주소를 기준으로 절대 경로가 된다.
   metadataBase: new URL(SITE_URL),
-  title: "interVentures | 인터벤처스",
-  description: "대한민국 국가경쟁력을 선도할 스타트업들과 함께 뛰는 인터벤처스",
+  // 자기 메타데이터를 두지 않는 라우트(404 등)가 물려받는 기본 카드.
+  // path를 넘기지 않아 canonical과 og:url은 붙지 않는다.
+  ...pageMetadata({ title: SITE_TITLE, description: SITE_DESCRIPTION }),
 };
 
 export default function RootLayout({

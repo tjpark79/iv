@@ -11,14 +11,18 @@ import {
   getTimeline,
 } from "@/lib/content";
 import { SERIES, getAllInsights } from "@/lib/insights";
+import { pageMetadata } from "@/lib/metadata";
+import { SITE_DESCRIPTION, SITE_TITLE } from "@/lib/site";
 
 // 애드센스 소유권 확인 메타태그는 루트 URL에만 실린다. 루트 레이아웃에 두면
 // 404를 포함한 모든 라우트에 상속돼 "콘텐츠 없는 화면에 광고" 사유가 된다.
 export const metadata: Metadata = {
   // www.inter.vc도 같은 내용을 200으로 서빙하므로 apex를 대표 주소로 못박는다.
-  alternates: {
-    canonical: "/",
-  },
+  ...pageMetadata({
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    path: "/",
+  }),
   other: {
     "google-adsense-account": "ca-pub-8977093633487347",
   },

@@ -4,15 +4,14 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { getPortfolio, SERVICES_INTRO } from "@/lib/content";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "서비스 | 인터벤처스",
   description:
     "경영전략 컨설팅, 재무기획 컨설팅, M&A 전략 컨설팅, 강의, IR 리포트 작성, 멘토링 — 인터벤처스가 초기 기업과 함께 수행하는 여섯 가지 업무를 안내합니다.",
-  alternates: {
-    canonical: "/services",
-  },
-};
+  path: "/services",
+});
 
 export default function ServicesPage() {
   const items = getPortfolio();

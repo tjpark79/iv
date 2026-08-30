@@ -2,15 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import LegalLayout from "@/components/LegalLayout";
 import { AFFILIATE, BUSINESS } from "@/lib/site";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "개인정보처리방침 | 인터벤처스",
   description:
     "(주)인터벤처스 개인정보처리방침입니다. 회원가입 절차가 없으며 문의 이메일 외에는 개인정보를 수집하지 않습니다. 광고 쿠키와 이제이와의 개인정보 상호 이전에 관한 사항을 안내합니다.",
-  alternates: {
-    canonical: "/privacy",
-  },
-};
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (

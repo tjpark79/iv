@@ -4,15 +4,14 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Timeline from "@/components/Timeline";
 import { ABOUT_INTRO, WORKING_PRINCIPLES, getTimeline } from "@/lib/content";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "회사 소개 | 인터벤처스",
   description:
     "인터벤처스는 2018년부터 초기 기업의 경영과 재무를 맡아 온 회사입니다. 증권사 리서치와 자산운용 경험을 바탕으로 CFO·CSO의 역할을 외부에서 수행합니다.",
-  alternates: {
-    canonical: "/about",
-  },
-};
+  path: "/about",
+});
 
 export default function AboutPage() {
   const timeline = getTimeline();

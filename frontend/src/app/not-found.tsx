@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+// path를 넘기지 않는다 — 없는 주소에 canonical을 붙이면 안 된다.
+export const metadata: Metadata = pageMetadata({
   title: "페이지를 찾을 수 없습니다 | 인터벤처스",
   description:
     "요청하신 주소의 페이지가 없습니다. 인터벤처스 홈에서 필요한 정보를 찾아보세요.",
-};
+});
 
 export default function NotFound() {
   return (

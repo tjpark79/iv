@@ -10,6 +10,7 @@ import {
   getAllInsights,
   getInsight,
 } from "@/lib/insights";
+import { pageMetadata } from "@/lib/metadata";
 
 export async function generateStaticParams() {
   return getAllInsights().map((post) => ({ slug: post.slug }));
@@ -22,21 +23,13 @@ export async function generateMetadata({
   const post = await getInsight(slug);
   if (!post) return {};
 
-  return {
+  return pageMetadata({
     title: `${post.title} | 인터벤처스`,
     description: post.description,
-    alternates: {
-      canonical: `/insights/${post.slug}`,
-    },
-    openGraph: {
-      type: "article",
-      title: post.title,
-      description: post.description,
-      url: `/insights/${post.slug}`,
-      publishedTime: post.date,
-      siteName: SITE_NAME,
-    },
-  };
+    path: `/insights/${post.slug}`,
+    type: "article",
+    publishedTime: post.date,
+  });
 }
 
 export default async function InsightPage({

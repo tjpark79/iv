@@ -8,10 +8,18 @@ import { getAllInsights } from "@/lib/insights";
  * 인사이트 글은 content/insights를 읽어 자동으로 들어간다.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
+  const posts = getAllInsights();
+
+  // 홈과 목록은 글이 늘면 같이 바뀐다. 손으로 적은 날짜와 최신 글 날짜 중
+  // 나중 것을 쓴다 — 글만 추가하고 CONTENT_UPDATED_AT을 잊어도 어긋나지 않는다.
+  const newestPost = posts[0]?.date ?? CONTENT_UPDATED_AT;
+  const feedUpdatedAt =
+    newestPost > CONTENT_UPDATED_AT ? newestPost : CONTENT_UPDATED_AT;
+
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: SITE_URL,
-      lastModified: CONTENT_UPDATED_AT,
+      lastModified: feedUpdatedAt,
       changeFrequency: "monthly",
       priority: 1,
     },
@@ -35,7 +43,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${SITE_URL}/insights`,
-      lastModified: CONTENT_UPDATED_AT,
+      lastModified: feedUpdatedAt,
       changeFrequency: "weekly",
       priority: 0.8,
     },
@@ -59,12 +67,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  const posts: MetadataRoute.Sitemap = getAllInsights().map((post) => ({
+  const postPages: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${SITE_URL}/insights/${post.slug}`,
     lastModified: post.date,
     changeFrequency: "yearly",
     priority: 0.6,
   }));
 
-  return [...staticPages, ...posts];
+  return [...staticPages, ...postPages];
 }
