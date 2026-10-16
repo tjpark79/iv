@@ -39,6 +39,9 @@ function once<T>(key: string, make: () => T): T {
   return memo.get(key) as T;
 }
 
+/** 파일명으로 쓰는 slug 형식. `..`나 `/`가 섞인 값이 경로로 들어가지 않게 한다. */
+const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
 function isSeriesKey(value: unknown): value is SeriesKey {
   return typeof value === "string" && value in SERIES;
 }
@@ -92,7 +95,17 @@ function readSlugs(): string[] {
   return fs
     .readdirSync(INSIGHTS_DIR)
     .filter((name) => name.endsWith(".md"))
-    .map((name) => name.replace(/\.md$/, ""));
+    .map((name) => {
+      const slug = name.replace(/\.md$/, "");
+      // getInsight가 형식이 틀린 slug를 거르므로, 그런 파일은 목록에만 뜨고
+      // 본문은 404가 된다. 조용히 깨진 링크가 되기 전에 빌드를 멈춘다.
+      if (!SLUG_PATTERN.test(slug)) {
+        throw new Error(
+          `content/insights/${name}: 파일명은 소문자·숫자·하이픈만 씁니다 (예: term-sheet-basics.md).`
+        );
+      }
+      return slug;
+    });
 }
 
 /** 목록용. 본문 변환 없이 프론트매터만 읽어 최신순으로 돌려준다. */
@@ -115,6 +128,10 @@ export function getAllInsights(): InsightMeta[] {
 
 /** 본문용. 없는 slug면 null을 돌려준다(호출부에서 notFound 처리). */
 export function getInsight(slug: string): Promise<Insight | null> {
+  // 형식이 틀린 값은 메모에 넣지 않고 바로 돌려보낸다. 주소창에서 오는 값을
+  // 키로 쌓으면 요청마다 메모가 늘어난다.
+  if (!SLUG_PATTERN.test(slug)) return Promise.resolve(null);
+
   return once(`post:${slug}`, async (): Promise<Insight | null> => {
     const file = path.join(INSIGHTS_DIR, `${slug}.md`);
     if (!fs.existsSync(file)) return null;

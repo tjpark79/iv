@@ -3,7 +3,7 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { BUSINESS, SITE_NAME, SITE_URL } from "@/lib/site";
-import { pageMetadata } from "@/lib/metadata";
+import { jsonLdString, pageMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = pageMetadata({
   title: "문의 | 인터벤처스",
@@ -45,7 +45,7 @@ export default function ContactPage() {
       <main className="flex-1">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdString(jsonLd) }}
         />
 
         <section className="bg-brand py-20 md:py-28">

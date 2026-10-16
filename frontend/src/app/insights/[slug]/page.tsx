@@ -10,7 +10,11 @@ import {
   getAllInsights,
   getInsight,
 } from "@/lib/insights";
-import { pageMetadata } from "@/lib/metadata";
+import { jsonLdString, pageMetadata } from "@/lib/metadata";
+
+// 글은 전부 빌드 때 만들어진다. 목록에 없는 slug는 렌더하지 않고 바로 404를
+// 낸다 — 기본값(true)이면 아무 주소나 요청 시점에 그려 서버 시간을 쓴다.
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
   return getAllInsights().map((post) => ({ slug: post.slug }));
@@ -62,7 +66,7 @@ export default async function InsightPage({
       <main className="flex-1">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdString(jsonLd) }}
         />
 
         <article>

@@ -37,6 +37,15 @@ type PageMeta = {
   publishedTime?: string;
 };
 
+/**
+ * <script type="application/ld+json"> 안에 넣을 문자열. JSON.stringify는 `<`를
+ * 그대로 두므로 값에 `</script>`가 들어가면 태그가 거기서 닫힌다. 글 제목·설명이
+ * 그대로 들어가는 자리라 `<`를 이스케이프해 둔다(JSON으로는 같은 값이다).
+ */
+export function jsonLdString(data: unknown): string {
+  return JSON.stringify(data).replace(/</g, "\\u003c");
+}
+
 export function pageMetadata({
   title,
   description,

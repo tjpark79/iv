@@ -4,6 +4,10 @@
 # 프로덕션 자격증명 (절대 git에 올리지 않음)
 /PRODUCTION_CREDENTIALS.md
 
+# 내부 메모 (SSH 접속 정보, 다른 프로젝트의 인증·DB 설계 등).
+# 이 저장소는 PUBLIC이다. 2026-10-16에 PROJECT_NOTES.md에서 떼어 냈다.
+/PRIVATE_NOTES.md
+
 # 2019년 구 홈페이지 원본 (새 사이트로 콘텐츠 이관 완료, 로컬 참고용으로만 보관)
 /iv_h/
 

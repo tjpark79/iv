@@ -15,11 +15,12 @@ const NAV_LINKS = [
 export default function Header() {
   const [open, setOpen] = useState(false);
 
+  // 헤더·푸터 바탕은 브랜드 초록으로 고정한다 (P/CLAUDE.md 공통 규칙).
   return (
-    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-brand-border">
+    <header className="sticky top-0 z-50 bg-brand border-b border-white/10">
       <div className="mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
         <Link href="/#page-top">
-          <Logo />
+          <Logo variant="light" />
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">
@@ -27,7 +28,7 @@ export default function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-foreground/80 hover:text-brand transition-colors"
+              className="text-sm font-medium text-white/80 hover:text-white transition-colors"
             >
               {link.label}
             </Link>
@@ -35,7 +36,7 @@ export default function Header() {
         </nav>
 
         <button
-          className="md:hidden text-foreground"
+          className="md:hidden text-white"
           onClick={() => setOpen((v) => !v)}
           aria-label={open ? "메뉴 닫기" : "메뉴 열기"}
           aria-expanded={open}
@@ -48,14 +49,14 @@ export default function Header() {
       {open && (
         <nav
           id="mobile-nav"
-          className="md:hidden border-t border-brand-border bg-white px-6 py-4 flex flex-col gap-4"
+          className="md:hidden border-t border-white/15 bg-brand px-6 py-4 flex flex-col gap-4"
         >
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="text-sm font-medium text-foreground/80 hover:text-brand transition-colors"
+              className="text-sm font-medium text-white/80 hover:text-white transition-colors"
             >
               {link.label}
             </Link>
