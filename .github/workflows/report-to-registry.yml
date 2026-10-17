@@ -2,19 +2,22 @@
 #   → <프로젝트>/.github/workflows/report-to-registry.yml
 #
 # 하는 일: 배포가 끝나면 자기 project.yml 과 실제 의존성 버전을
-#          레지스트리 리포에 적어 보낸다.
+#          레지스트리의 데이터 리포(tjpark79/registry-data)에 적어 보낸다.
 #
 # ── 붙이기 전에 준비할 것 ────────────────────────────────────────────────
 # 1. 이 리포 루트에 project.yml 을 둔다
 #    (레지스트리에서 `npm run scaffold -- <이 리포 경로>` 로 초안을 만들 수 있다)
 # 2. 리포 Settings → Secrets → Actions 에 REGISTRY_TOKEN 을 추가한다
 #    - tjpark79 계정에서 만든 fine-grained PAT
-#    - Repository access: tjpark79/registry **한 곳만**
+#    - Repository access: tjpark79/registry-data **한 곳만**
+#      (레지스트리 본체 tjpark79/registry 는 넣지 않는다 — 아래 참고)
 #    - Permissions: Contents = Read and write
 #    - 이 토큰은 만든 사람 자격으로 동작하므로 nick798 소유 리포에서도 그대로 쓴다
 #
-# 이 토큰이 유출돼도 남의 계정을 건드릴 수 없다. 레지스트리 한 곳에
-# 엉뚱한 값을 쓰는 게 전부이고, 그건 이력에 남아 되돌릴 수 있다.
+# 이 토큰이 닿는 곳은 데이터 리포 하나다. 거기에는 실행되는 코드가 없고,
+# 레지스트리 본체는 모양이 정해진 데이터 파일만 읽어 간다. 새면 엉뚱한 값이
+# 적힐 수 있지만 이력에 남아 되돌릴 수 있다. 본체를 Repository access 에 넣으면
+# 이 토큰이 본체의 코드까지 쓸 수 있게 되므로 넣지 않는다.
 
 name: 레지스트리 보고
 
@@ -36,25 +39,30 @@ jobs:
   report:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # 이 워크플로는 git 으로 아무것도 밀지 않는다. 자격증명을 .git 에 남기지 않는다.
+          persist-credentials: false
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
 
       - name: 레지스트리에 보고
         env:
           REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN }}
-          # 보고 스크립트를 받아올 **레지스트리 커밋**. 아래 curl 의 ?ref= 에 쓴다.
+          # 보고 스크립트를 받아올 **데이터 리포 커밋**. 아래 curl 의 ?ref= 에 쓴다.
           #
-          # 왜 main 이 아니라 커밋인가: REGISTRY_TOKEN 은 레지스트리에 쓰기
-          # 권한이 있다. main 에서 받아오면 이 토큰이 새는 순간 남이 report.mjs
-          # 를 바꿔치기해 이 리포의 러너에서 실행시킬 수 있다. 커밋은 내용으로
-          # 주소가 정해지므로 못을 박아 두면 그 경로가 막힌다.
+          # 왜 main 이 아니라 커밋인가: REGISTRY_TOKEN 은 데이터 리포에 쓰기
+          # 권한이 있고, 스크립트도 거기(reporter/)에 있다. main 에서 받아오면
+          # 이 토큰이 새는 순간 남이 report.mjs 를 바꿔치기해 이 리포의 러너에서
+          # 실행시킬 수 있다. 커밋은 내용으로 주소가 정해지므로 못을 박아 두면
+          # 그 경로가 막힌다. pin-scripts 는 레지스트리 본체에 있는 원본과 지문이
+          # 같은 커밋에만 못을 박는다.
           #
           # 레지스트리에서 `npm run pin-scripts` 를 돌리면 이 줄이 갱신된다.
           # 낡은 채로 두면 레지스트리의 /drift/ 가 알려 준다.
-          REPORT_SCRIPT_REF: a94bb436180b76ca58a29e636c275690a939c029
+          REPORT_SCRIPT_REF: ddd477659617f7e46156e562a23dab07140f07c8
           # 배포 주소를 아는 워크플로라면 여기에 넘긴다. 모르면 비워 둔다 —
           # 추측한 주소를 적느니 비어 있는 편이 낫다.
           DEPLOY_URL: ''
@@ -72,13 +80,13 @@ jobs:
             exit 0
           fi
 
-          # 보고 스크립트는 레지스트리에서 그때그때 받아 쓴다.
+          # 보고 스크립트는 데이터 리포의 고정 커밋에서 그때그때 받아 쓴다.
           # 프로젝트마다 복사해 두면 고칠 때 8곳을 따라다녀야 한다.
           for f in report.mjs secret-scan.mjs; do
             curl -fsSL \
               -H "Authorization: Bearer $REGISTRY_TOKEN" \
               -H "Accept: application/vnd.github.raw" \
-              "https://api.github.com/repos/tjpark79/registry/contents/scripts/$f?ref=$REPORT_SCRIPT_REF" \
+              "https://api.github.com/repos/tjpark79/registry-data/contents/reporter/$f?ref=$REPORT_SCRIPT_REF" \
               -o "$RUNNER_TEMP/$f"
           done
 
